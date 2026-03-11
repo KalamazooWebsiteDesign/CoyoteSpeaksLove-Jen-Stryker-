@@ -3,36 +3,42 @@
 RewriteEngine On
 RewriteBase /
 
-# Allow WordPress REST API
-RewriteRule ^wp-json/(.*) /wp-json/$1 [L]
+# WordPress core files — pass directly to PHP
+RewriteRule ^wp-login\.php$ - [L]
+RewriteRule ^wp-cron\.php$ - [L]
+RewriteRule ^xmlrpc\.php$ - [L]
 
-# Allow WordPress admin and core files
-RewriteRule ^wp-admin(.*)$ /wp-admin$1 [L]
-RewriteRule ^wp-login\.php$ /wp-login.php [L]
-RewriteRule ^wp-content/(.*)$ /wp-content/$1 [L]
-RewriteRule ^wp-includes/(.*)$ /wp-includes/$1 [L]
-RewriteRule ^wp-cron\.php$ /wp-cron.php [L]
-RewriteRule ^xmlrpc\.php$ /xmlrpc.php [L]
+# WordPress directories — pass through without rewriting
+RewriteRule ^wp-admin(.*)$ - [L]
+RewriteRule ^wp-content/(.*)$ - [L]
+RewriteRule ^wp-includes/(.*)$ - [L]
 
-# Allow WooCommerce pages (handled by WordPress)
-RewriteRule ^shop(.*)$ /index.php [L]
-RewriteRule ^cart(.*)$ /index.php [L]
-RewriteRule ^checkout(.*)$ /index.php [L]
-RewriteRule ^my-account(.*)$ /index.php [L]
-RewriteRule ^product(.*)$ /index.php [L]
-RewriteRule ^\?add-to-cart= /index.php [L]
-RewriteRule ^\?wc-api= /index.php [L]
+# WordPress REST API
+RewriteRule ^wp-json(/.*)?$ /index.php [L]
 
-# Allow WordPress permalink handling for blog posts
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
+# WooCommerce pages (handled by WordPress)
+RewriteRule ^shop(/.*)?$ /index.php [L]
+RewriteRule ^cart(/.*)?$ /index.php [L]
+RewriteRule ^checkout(/.*)?$ /index.php [L]
+RewriteRule ^my-account(/.*)?$ /index.php [L]
+RewriteRule ^product(/.*)?$ /index.php [L]
+RewriteRule ^product-category(/.*)?$ /index.php [L]
+
+# WooCommerce AJAX/API
+RewriteCond %{QUERY_STRING} wc-api= [OR]
+RewriteCond %{QUERY_STRING} add-to-cart= [OR]
+RewriteCond %{QUERY_STRING} removed_item= [OR]
+RewriteCond %{QUERY_STRING} wc-ajax=
+RewriteRule ^(.*)$ /index.php [L]
+
+# WordPress blog posts (handled by WordPress)
 RewriteRule ^blog/(.+)$ /index.php [L]
 
-# Serve static files from the React build if they exist
+# Serve existing static files directly (React build assets, images, etc.)
 RewriteCond %{REQUEST_FILENAME} -f
-RewriteRule ^(.*)$ $1 [L]
+RewriteRule ^(.*)$ - [L]
 
-# For all other non-file, non-directory requests, serve React's index.html
+# Everything else goes to React's index.html
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ /index.html [L]
