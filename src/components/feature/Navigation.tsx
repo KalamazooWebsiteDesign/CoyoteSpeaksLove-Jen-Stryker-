@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useCart } from "../../lib/CartContext";
 
 export default function Navigation() {
+  const { itemCount } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -105,13 +107,6 @@ export default function Navigation() {
               Merchandise
             </Link>
 
-            <a
-              href="/shop"
-              className="text-sm font-semibold transition-colors whitespace-nowrap text-white hover:text-[#91E5F6]"
-            >
-              Shop
-            </a>
-
             <Link
               to="/blog"
               className={`text-sm font-semibold transition-colors whitespace-nowrap ${
@@ -128,6 +123,7 @@ export default function Navigation() {
             {[
               { icon: "ri-instagram-line", href: "https://www.instagram.com/stryker_jennifer/" },
               { icon: "ri-facebook-fill", href: "https://www.facebook.com/jennifer.stryker.2025/" },
+              { icon: "ri-tiktok-fill", href: "#" },
             ].map((item, i) => (
               <a
                 key={i}
@@ -139,6 +135,20 @@ export default function Navigation() {
                 <i className={`${item.icon} text-lg`}></i>
               </a>
             ))}
+            <Link
+              to="/cart"
+              className="w-9 h-9 flex items-center justify-center text-white hover:text-[#91E5F6] transition-colors relative"
+            >
+              <i className="ri-shopping-cart-line text-lg"></i>
+              {itemCount > 0 && (
+                <span
+                  className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center text-xs font-bold rounded-full"
+                  style={{ backgroundColor: "#91E5F6", color: "#133C55" }}
+                >
+                  {itemCount}
+                </span>
+              )}
+            </Link>
           </div>
 
           <button
@@ -214,13 +224,6 @@ export default function Navigation() {
             >
               Merchandise
             </Link>
-
-            <a
-              href="/shop"
-              className="block text-sm font-semibold transition-colors text-white hover:text-[#91E5F6]"
-            >
-              Shop
-            </a>
 
             <Link
               to="/blog"

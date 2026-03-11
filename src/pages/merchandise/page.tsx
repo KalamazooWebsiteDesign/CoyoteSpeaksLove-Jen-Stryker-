@@ -1,119 +1,73 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Navigation from '../../components/feature/Navigation';
+import Footer from '../../components/feature/Footer';
+import { getProducts, type WCProduct } from '../../lib/wc';
+import { useCart } from '../../lib/CartContext';
 
-const categories = ['All', 'Apparel', 'Books', 'Accessories', 'Art Prints'];
+const fallbackImages: Record<string, string> = {
+  'my-neighbors-are-vampires-t-shirt': 'https://readdy.ai/api/search-image?query=white%20cotton%20t-shirt%20with%20book%20cover%20design%20on%20front%20flat%20lay%20on%20clean%20surface%20minimal%20product%20photography&width=400&height=500&seq=merch1&orientation=portrait',
+  'keanu-tails-hardcover': 'https://coyotespeakslove.com/staging/9788/wp-content/uploads/2026/03/Placeholder-Image-1-1.jpg',
+  'my-navpit-hardcover': 'https://coyotespeakslove.com/staging/9788/wp-content/uploads/2026/03/Placeholder-Image-2-1011x1024.jpg',
+  'keanu-tails-tote-bag': 'https://readdy.ai/api/search-image?query=canvas%20tote%20bag%20with%20book%20inspired%20design%20hanging%20on%20white%20wall%20minimal%20clean%20product%20photography%20natural%20light&width=400&height=500&seq=merch4&orientation=portrait',
+  'author-signature-hoodie': 'https://readdy.ai/api/search-image?query=premium%20navy%20blue%20hoodie%20folded%20neatly%20on%20white%20surface%20minimal%20product%20photography%20soft%20lighting&width=400&height=500&seq=merch5&orientation=portrait',
+  'vampire-neighbors-mug': 'https://readdy.ai/api/search-image?query=white%20ceramic%20coffee%20mug%20with%20book%20themed%20design%20on%20clean%20white%20surface%20minimal%20product%20photography%20soft%20shadows&width=400&height=500&seq=merch6&orientation=portrait',
+  'book-character-art-print': 'https://readdy.ai/api/search-image?query=framed%20art%20print%20with%20book%20illustration%20on%20white%20wall%20minimal%20clean%20interior%20photography%20natural%20light&width=400&height=500&seq=merch7&orientation=portrait',
+  'writers-journal': 'https://readdy.ai/api/search-image?query=elegant%20hardcover%20journal%20notebook%20with%20pen%20on%20wooden%20desk%20minimal%20stationery%20photography%20soft%20lighting&width=400&height=500&seq=merch8&orientation=portrait',
+  'keanu-tails-sweatshirt': 'https://readdy.ai/api/search-image?query=cozy%20crewneck%20sweatshirt%20folded%20on%20white%20background%20minimal%20product%20photography%20clean%20aesthetic&width=400&height=500&seq=merch9&orientation=portrait',
+};
 
-const products = [
-  {
-    id: 1,
-    name: 'My Neighbors Are Vampires T-Shirt',
-    category: 'Apparel',
-    price: 24.99,
-    image: 'https://readdy.ai/api/search-image?query=white%20cotton%20t-shirt%20with%20book%20cover%20design%20on%20front%20flat%20lay%20on%20clean%20surface%20minimal%20product%20photography&width=400&height=500&seq=merch1&orientation=portrait',
-    featured: true,
-  },
-  {
-    id: 2,
-    name: 'Keanu Tails Hardcover',
-    category: 'Books',
-    price: 19.99,
-    image: 'https://coyotespeakslove.com/staging/9788/wp-content/uploads/2026/03/Placeholder-Image-1-1.jpg',
-    featured: true,
-  },
-  {
-    id: 3,
-    name: 'My NAVPIT Hardcover',
-    category: 'Books',
-    price: 16.99,
-    image: 'https://coyotespeakslove.com/staging/9788/wp-content/uploads/2026/03/Placeholder-Image-2-1011x1024.jpg',
-    featured: false,
-  },
-  {
-    id: 4,
-    name: 'Keanu Tails Tote Bag',
-    category: 'Accessories',
-    price: 18.99,
-    image: 'https://readdy.ai/api/search-image?query=canvas%20tote%20bag%20with%20book%20inspired%20design%20hanging%20on%20white%20wall%20minimal%20clean%20product%20photography%20natural%20light&width=400&height=500&seq=merch4&orientation=portrait',
-    featured: false,
-  },
-  {
-    id: 5,
-    name: 'Author Signature Hoodie',
-    category: 'Apparel',
-    price: 42.99,
-    image: 'https://readdy.ai/api/search-image?query=premium%20navy%20blue%20hoodie%20folded%20neatly%20on%20white%20surface%20minimal%20product%20photography%20soft%20lighting&width=400&height=500&seq=merch5&orientation=portrait',
-    featured: false,
-  },
-  {
-    id: 6,
-    name: 'Vampire Neighbors Mug',
-    category: 'Accessories',
-    price: 14.99,
-    image: 'https://readdy.ai/api/search-image?query=white%20ceramic%20coffee%20mug%20with%20book%20themed%20design%20on%20clean%20white%20surface%20minimal%20product%20photography%20soft%20shadows&width=400&height=500&seq=merch6&orientation=portrait',
-    featured: false,
-  },
-  {
-    id: 7,
-    name: 'Book Character Art Print',
-    category: 'Art Prints',
-    price: 29.99,
-    image: 'https://readdy.ai/api/search-image?query=framed%20art%20print%20with%20book%20illustration%20on%20white%20wall%20minimal%20clean%20interior%20photography%20natural%20light&width=400&height=500&seq=merch7&orientation=portrait',
-    featured: true,
-  },
-  {
-    id: 8,
-    name: 'Writer\'s Journal',
-    category: 'Accessories',
-    price: 22.99,
-    image: 'https://readdy.ai/api/search-image?query=elegant%20hardcover%20journal%20notebook%20with%20pen%20on%20wooden%20desk%20minimal%20stationery%20photography%20soft%20lighting&width=400&height=500&seq=merch8&orientation=portrait',
-    featured: false,
-  },
-  {
-    id: 9,
-    name: 'Keanu Tails Sweatshirt',
-    category: 'Apparel',
-    price: 38.99,
-    image: 'https://readdy.ai/api/search-image?query=cozy%20crewneck%20sweatshirt%20folded%20on%20white%20background%20minimal%20product%20photography%20clean%20aesthetic&width=400&height=500&seq=merch9&orientation=portrait',
-    featured: false,
-  },
-];
+function getProductImage(product: WCProduct): string {
+  if (product.images && product.images.length > 0 && product.images[0].src) {
+    return product.images[0].src;
+  }
+  return fallbackImages[product.slug] || 'https://via.placeholder.com/400x500?text=No+Image';
+}
 
 export default function MerchandisePage() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [products, setProducts] = useState<WCProduct[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [addingId, setAddingId] = useState<number | null>(null);
+  const [addedId, setAddedId] = useState<number | null>(null);
+  const { addToCart } = useCart();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    getProducts()
+      .then(setProducts)
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
-  // Animation on scroll
   useEffect(() => {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate-in');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('animate-in');
       });
     }, observerOptions);
-
     document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
-
     return () => observer.disconnect();
-  }, []);
+  }, [products, selectedCategory]);
 
-  const filteredProducts = selectedCategory === 'All' 
-    ? products 
-    : products.filter(p => p.category === selectedCategory);
+  const categories = ['All', ...Array.from(new Set(products.flatMap(p => p.categories.map(c => c.name))))];
+
+  const filteredProducts = selectedCategory === 'All'
+    ? products
+    : products.filter(p => p.categories.some(c => c.name === selectedCategory));
+
+  const handleAddToCart = async (productId: number) => {
+    setAddingId(productId);
+    try {
+      await addToCart(productId);
+      setAddedId(productId);
+      setTimeout(() => setAddedId(null), 2000);
+    } catch (e) {
+      console.error('Failed to add to cart:', e);
+    } finally {
+      setAddingId(null);
+    }
+  };
 
   return (
     <div className="min-h-screen" style={{ fontFamily: "'Montserrat', sans-serif", backgroundColor: '#f0f8ff' }}>
@@ -142,71 +96,7 @@ export default function MerchandisePage() {
         }
       `}</style>
 
-      {/* Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'shadow-lg' : ''
-      }`} style={{ backgroundColor: isScrolled ? '#133C55' : 'transparent' }}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            <Link to="/" className="flex items-center">
-              <img
-                src="https://coyotespeakslove.com/staging/9788/wp-content/uploads/2026/03/cropped-cropped-logo-_Jennifer_Stryker-transparent.webp"
-                alt="Jen Stryker"
-                className="h-14 w-14"
-              />
-            </Link>
-
-            <div className="hidden lg:flex items-center space-x-8">
-              <Link to="/" className="text-sm font-semibold text-white hover:text-[#91E5F6] transition-colors whitespace-nowrap">
-                Home
-              </Link>
-              <div className="relative group">
-                <button className="text-sm font-semibold text-white flex items-center gap-1 hover:text-[#91E5F6] transition-colors whitespace-nowrap">
-                  Current Releases
-                  <i className="ri-arrow-down-s-line text-base"></i>
-                </button>
-                <div className="absolute top-full left-0 mt-2 w-48 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200" style={{ backgroundColor: '#133C55' }}>
-                  <Link to="/books/keanu-tails" className="block px-4 py-3 text-sm text-white hover:text-[#91E5F6] transition-colors">Keanu Tails</Link>
-                  <Link to="/books/my-neighbors-are-vampires" className="block px-4 py-3 text-sm text-white hover:text-[#91E5F6] transition-colors">My NAVPIT</Link>
-                </div>
-              </div>
-              <Link to="/merchandise" className="text-sm font-semibold text-white hover:text-[#91E5F6] transition-colors whitespace-nowrap">
-                Merchandise
-              </Link>
-              <Link to="/writers-hub" className="text-sm font-semibold text-white hover:text-[#91E5F6] transition-colors whitespace-nowrap">
-                Writer's Hub
-              </Link>
-            </div>
-
-            <div className="hidden lg:flex items-center space-x-3">
-              {['ri-instagram-line', 'ri-facebook-fill', 'ri-twitter-fill', 'ri-tiktok-fill'].map((icon, i) => (
-                <a key={i} href="#" className="w-9 h-9 flex items-center justify-center text-white hover:text-[#91E5F6] transition-colors">
-                  <i className={`${icon} text-lg`}></i>
-                </a>
-              ))}
-            </div>
-
-            <button
-              className="lg:hidden w-10 h-10 flex items-center justify-center"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              <i className={`${mobileMenuOpen ? 'ri-close-line' : 'ri-menu-line'} text-2xl text-white`}></i>
-            </button>
-          </div>
-        </div>
-
-        {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-white/20" style={{ backgroundColor: '#133C55' }}>
-            <div className="px-6 py-4 space-y-3">
-              <Link to="/" className="block text-sm font-semibold text-white hover:text-[#91E5F6] transition-colors">Home</Link>
-              <Link to="/books/keanu-tails" className="block text-sm font-semibold text-white hover:text-[#91E5F6] transition-colors pl-4">Keanu Tails</Link>
-              <Link to="/books/my-neighbors-are-vampires" className="block text-sm font-semibold text-white hover:text-[#91E5F6] transition-colors pl-4">My NAVPIT</Link>
-              <Link to="/merchandise" className="block text-sm font-semibold text-white hover:text-[#91E5F6] transition-colors">Merchandise</Link>
-              <Link to="/writers-hub" className="block text-sm font-semibold text-white hover:text-[#91E5F6] transition-colors">Writer's Hub</Link>
-            </div>
-          </div>
-        )}
-      </nav>
+      <Navigation />
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-16 lg:pt-40 lg:pb-20 overflow-hidden" style={{ background: 'linear-gradient(135deg, #133C55 0%, #386FA4 60%, #59A5D8 100%)' }}>
@@ -214,7 +104,6 @@ export default function MerchandisePage() {
           <div className="absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: '#91E5F6' }}></div>
           <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl" style={{ backgroundColor: '#84D2F6' }}></div>
         </div>
-
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 text-center">
           <div className="inline-block px-4 py-2 text-xs font-bold tracking-widest uppercase rounded-full mb-6" style={{ backgroundColor: '#91E5F6', color: '#133C55' }}>
             Official Merchandise
@@ -257,44 +146,64 @@ export default function MerchandisePage() {
       {/* Products Grid */}
       <section className="py-16" style={{ background: 'linear-gradient(180deg, #f0f8ff 0%, #d0eeff 100%)' }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProducts.map((product, index) => (
-              <div
-                key={product.id}
-                className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group border scroll-animate hover-lift"
-                style={{ borderColor: '#d0eeff', transitionDelay: `${index * 80}ms` }}
-              >
-                <div className="relative w-full h-80 overflow-hidden">
-                  {product.featured && (
-                    <div className="absolute top-4 left-4 z-10 px-3 py-1 text-xs font-bold tracking-widest uppercase rounded-full" style={{ backgroundColor: '#91E5F6', color: '#133C55' }}>
-                      Bestseller
+          {loading ? (
+            <div className="text-center py-20">
+              <div className="inline-block w-12 h-12 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#386FA4', borderTopColor: 'transparent' }}></div>
+              <p className="mt-4 text-lg" style={{ color: '#386FA4' }}>Loading products...</p>
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredProducts.map((product, index) => (
+                <div
+                  key={product.id}
+                  className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group border scroll-animate hover-lift"
+                  style={{ borderColor: '#d0eeff', transitionDelay: `${index * 80}ms` }}
+                >
+                  <Link to={`/product/${product.slug}`} className="block">
+                    <div className="relative w-full h-80 overflow-hidden">
+                      {product.featured && (
+                        <div className="absolute top-4 left-4 z-10 px-3 py-1 text-xs font-bold tracking-widest uppercase rounded-full" style={{ backgroundColor: '#91E5F6', color: '#133C55' }}>
+                          Bestseller
+                        </div>
+                      )}
+                      <img
+                        src={getProductImage(product)}
+                        alt={product.name}
+                        className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
+                      />
                     </div>
-                  )}
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full" style={{ backgroundColor: '#d0eeff', color: '#386FA4' }}>
-                      {product.category}
-                    </span>
-                    <span className="text-lg font-bold" style={{ color: '#133C55' }}>
-                      ${product.price}
-                    </span>
+                  </Link>
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full" style={{ backgroundColor: '#d0eeff', color: '#386FA4' }}>
+                        {product.categories[0]?.name || 'Uncategorized'}
+                      </span>
+                      <span className="text-lg font-bold" style={{ color: '#133C55' }}>
+                        ${product.price}
+                      </span>
+                    </div>
+                    <Link to={`/product/${product.slug}`}>
+                      <h3 className="text-lg font-bold mb-4 leading-snug hover:text-[#386FA4] transition-colors" style={{ fontFamily: "'Fugaz One', cursive", color: '#133C55' }}>
+                        {product.name}
+                      </h3>
+                    </Link>
+                    <button
+                      onClick={() => handleAddToCart(product.id)}
+                      disabled={addingId === product.id}
+                      className="w-full px-6 py-3 font-bold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg whitespace-nowrap cursor-pointer text-white pulse-glow disabled:opacity-70"
+                      style={{
+                        background: addedId === product.id
+                          ? 'linear-gradient(135deg, #22c55e, #16a34a)'
+                          : 'linear-gradient(135deg, #386FA4, #133C55)',
+                      }}
+                    >
+                      {addingId === product.id ? 'Adding...' : addedId === product.id ? 'Added!' : 'Add to Cart'}
+                    </button>
                   </div>
-                  <h3 className="text-lg font-bold mb-4 leading-snug" style={{ fontFamily: "'Fugaz One', cursive", color: '#133C55' }}>
-                    {product.name}
-                  </h3>
-                  <button className="w-full px-6 py-3 font-bold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg whitespace-nowrap cursor-pointer text-white pulse-glow" style={{ background: 'linear-gradient(135deg, #386FA4, #133C55)' }}>
-                    Add to Cart
-                  </button>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -316,23 +225,15 @@ export default function MerchandisePage() {
                 <span className="text-4xl font-bold" style={{ color: '#91E5F6' }}>$32.99</span>
                 <span className="text-lg line-through" style={{ color: '#84D2F6' }}>$36.98</span>
               </div>
-              <button className="px-8 py-4 font-bold rounded-lg transition-all duration-300 shadow-lg whitespace-nowrap cursor-pointer pulse-glow" style={{ backgroundColor: '#91E5F6', color: '#133C55' }}>
+              <Link to="/merchandise" className="inline-block px-8 py-4 font-bold rounded-lg transition-all duration-300 shadow-lg whitespace-nowrap cursor-pointer pulse-glow" style={{ backgroundColor: '#91E5F6', color: '#133C55' }}>
                 Shop Bundle
-              </button>
+              </Link>
             </div>
             <div className="relative scroll-animate" style={{ transitionDelay: '200ms' }}>
               <div className="absolute inset-0 rounded-3xl blur-2xl opacity-30" style={{ background: 'linear-gradient(135deg, #59A5D8, #91E5F6)' }}></div>
               <div className="relative grid grid-cols-2 gap-4">
-                <img
-                  src="https://coyotespeakslove.com/staging/9788/wp-content/uploads/2026/03/Placeholder-Image-2-1011x1024.jpg"
-                  alt="My Neighbors Are Vampires"
-                  className="w-full h-auto rounded-xl shadow-2xl hover:scale-105 transition-transform duration-500"
-                />
-                <img
-                  src="https://coyotespeakslove.com/staging/9788/wp-content/uploads/2026/03/Placeholder-Image-1-1.jpg"
-                  alt="Keanu Tails"
-                  className="w-full h-auto rounded-xl shadow-2xl mt-8 hover:scale-105 transition-transform duration-500"
-                />
+                <img src="https://coyotespeakslove.com/staging/9788/wp-content/uploads/2026/03/Placeholder-Image-2-1011x1024.jpg" alt="My Neighbors Are Vampires" className="w-full h-auto rounded-xl shadow-2xl hover:scale-105 transition-transform duration-500" />
+                <img src="https://coyotespeakslove.com/staging/9788/wp-content/uploads/2026/03/Placeholder-Image-1-1.jpg" alt="Keanu Tails" className="w-full h-auto rounded-xl shadow-2xl mt-8 hover:scale-105 transition-transform duration-500" />
               </div>
             </div>
           </div>
@@ -349,9 +250,6 @@ export default function MerchandisePage() {
             Get new releases, writing tips, and story updates—sent occasionally, never spam.
           </p>
           <form
-            id="newsletter-form"
-            data-readdy-form
-            action="https://readdy.ai/api/form/d6legiaqoe30lj0v7uhg"
             className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto"
             onSubmit={async (e) => {
               e.preventDefault();
@@ -370,68 +268,15 @@ export default function MerchandisePage() {
               }
             }}
           >
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter Your Email"
-              className="flex-1 px-6 py-4 rounded-lg border-2 focus:outline-none text-sm"
-              style={{ borderColor: '#59A5D8', color: '#133C55' }}
-              required
-            />
-            <button
-              type="submit"
-              className="px-8 py-4 font-bold rounded-lg transition-all duration-300 shadow-lg whitespace-nowrap cursor-pointer text-white"
-              style={{ background: 'linear-gradient(135deg, #386FA4, #133C55)' }}
-            >
+            <input type="email" name="email" placeholder="Enter Your Email" className="flex-1 px-6 py-4 rounded-lg border-2 focus:outline-none text-sm" style={{ borderColor: '#59A5D8', color: '#133C55' }} required />
+            <button type="submit" className="px-8 py-4 font-bold rounded-lg transition-all duration-300 shadow-lg whitespace-nowrap cursor-pointer text-white" style={{ background: 'linear-gradient(135deg, #386FA4, #133C55)' }}>
               Subscribe
             </button>
           </form>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-16 text-white" style={{ background: 'linear-gradient(135deg, #133C55 0%, #386FA4 100%)' }}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex flex-col items-center space-y-8">
-            <img
-              src="https://coyotespeakslove.com/staging/9788/wp-content/uploads/2026/03/cropped-cropped-logo-_Jennifer_Stryker-transparent.webp"
-              alt="Jen Stryker"
-              className="h-16 w-16"
-            />
-
-            <div className="flex items-center space-x-6">
-              {['ri-instagram-line', 'ri-facebook-fill', 'ri-twitter-fill', 'ri-tiktok-fill'].map((icon, i) => (
-                <a key={i} href="#" className="w-10 h-10 flex items-center justify-center text-white hover:text-[#91E5F6] transition-colors">
-                  <i className={`${icon} text-xl`}></i>
-                </a>
-              ))}
-            </div>
-
-            <nav className="flex flex-wrap justify-center gap-6 text-sm">
-              {[
-                { label: 'Home', href: '/' },
-                { label: 'Current Releases', href: '/current-releases' },
-                { label: 'Keanu Tails', href: '/books/keanu-tails' },
-                { label: 'My NAVPIT', href: '/books/my-neighbors-are-vampires' },
-                { label: 'Merchandise', href: '/merchandise' },
-                { label: "Writer's Hub", href: '/writers-hub' },
-              ].map((link, i) => (
-                <Link key={i} to={link.href} className="transition-colors hover:text-[#91E5F6]" style={{ color: '#84D2F6' }}>
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-
-            <div className="flex flex-col sm:flex-row items-center gap-4 text-sm" style={{ color: '#84D2F6' }}>
-              <p>© 2026-Present</p>
-              <span className="hidden sm:inline">•</span>
-              <a href="https://www.kalamazoowebsitedesign.com" target="_blank" rel="noopener noreferrer nofollow" className="hover:text-[#91E5F6] transition-colors">
-                Designed By Kalamazoo Website Design
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
