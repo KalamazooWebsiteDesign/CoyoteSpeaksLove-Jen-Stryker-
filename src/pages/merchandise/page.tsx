@@ -99,20 +99,16 @@ export default function MerchandisePage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-16 lg:pt-40 lg:pb-20 overflow-hidden" style={{ background: 'linear-gradient(135deg, #133C55 0%, #386FA4 60%, #59A5D8 100%)' }}>
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: '#91E5F6' }}></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl" style={{ backgroundColor: '#84D2F6' }}></div>
-        </div>
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <div className="inline-block px-4 py-2 text-xs font-bold tracking-widest uppercase rounded-full mb-6" style={{ backgroundColor: '#91E5F6', color: '#133C55' }}>
+      <section className="pt-36 pb-16 overflow-hidden" style={{ background: 'linear-gradient(135deg, #133C55 0%, #386FA4 60%, #59A5D8 100%)' }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+          <div className="inline-block px-4 py-1.5 text-xs font-bold tracking-widest uppercase rounded-full mb-6" style={{ backgroundColor: '#91E5F6', color: '#133C55' }}>
             Official Merchandise
           </div>
           <h1 className="text-5xl lg:text-7xl font-bold text-white leading-tight mb-6" style={{ fontFamily: "'Fugaz One', cursive" }}>
             Merchandise
           </h1>
-          <p className="text-lg leading-relaxed max-w-2xl mx-auto" style={{ color: '#d0eeff' }}>
-            Bring the stories home with official books, apparel, and exclusive collectibles from Jen Stryker's creative world.
+          <p className="text-base lg:text-lg max-w-xl mx-auto" style={{ color: '#d0eeff' }}>
+            Bring the stories home with official books, apparel, and exclusive collectibles from Jen Stryker&apos;s creative world.
           </p>
         </div>
       </section>
@@ -241,16 +237,19 @@ export default function MerchandisePage() {
       </section>
 
       {/* Newsletter Section */}
-      <section className="py-16" style={{ background: 'linear-gradient(135deg, #d0eeff 0%, #91E5F6 100%)' }}>
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center scroll-animate">
-          <h2 className="text-4xl lg:text-5xl font-bold mb-4" style={{ fontFamily: "'Fugaz One', cursive", color: '#133C55' }}>
-            STAY IN THE CONVERSATION
+      <section className="py-20" style={{ background: 'linear-gradient(135deg, #d0eeff 0%, #91E5F6 100%)' }}>
+        <div className="max-w-xl mx-auto px-6 lg:px-8 text-center scroll-animate">
+          <h2 className="text-3xl lg:text-4xl font-bold mb-3" style={{ fontFamily: "'Fugaz One', cursive", color: '#133C55' }}>
+            Stay in the Conversation
           </h2>
-          <p className="text-lg mb-8" style={{ color: '#386FA4' }}>
-            Get new releases, writing tips, and story updates—sent occasionally, never spam.
+          <p className="text-sm mb-8" style={{ color: '#386FA4' }}>
+            New releases, writing tips, and story updates — sent occasionally, never spam.
           </p>
           <form
-            className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto"
+            id="newsletter-merch"
+            data-readdy-form
+            action="https://readdy.ai/api/form/d6legiaqoe30lj0v7uhg"
+            className="flex flex-col sm:flex-row gap-3"
             onSubmit={async (e) => {
               e.preventDefault();
               const form = e.currentTarget;
@@ -262,14 +261,11 @@ export default function MerchandisePage() {
                   body: data.toString(),
                 });
                 form.reset();
-                alert('Thank you for subscribing!');
-              } catch {
-                alert('Something went wrong. Please try again.');
-              }
+              } catch { /* silent */ }
             }}
           >
-            <input type="email" name="email" placeholder="Enter Your Email" className="flex-1 px-6 py-4 rounded-lg border-2 focus:outline-none text-sm" style={{ borderColor: '#59A5D8', color: '#133C55' }} required />
-            <button type="submit" className="px-8 py-4 font-bold rounded-lg transition-all duration-300 shadow-lg whitespace-nowrap cursor-pointer text-white" style={{ background: 'linear-gradient(135deg, #386FA4, #133C55)' }}>
+            <input type="email" name="email" placeholder="Your email address" className="flex-1 px-5 py-3.5 rounded-lg text-sm focus:outline-none" style={{ backgroundColor: '#FFFFFF', border: '1px solid #84D2F6', color: '#133C55' }} required />
+            <button type="submit" className="px-7 py-3.5 font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-white" style={{ backgroundColor: '#133C55' }}>
               Subscribe
             </button>
           </form>

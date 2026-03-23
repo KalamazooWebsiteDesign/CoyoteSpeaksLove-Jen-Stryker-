@@ -3,62 +3,32 @@ import { Link } from "react-router-dom";
 import Navigation from "../../components/feature/Navigation";
 import Footer from "../../components/feature/Footer";
 import AnimatedDropdown from "../../components/base/AnimatedDropdown";
-import { getPosts } from "../../lib/wp";
-
-type WPPost = {
-  id: number;
-  slug: string;
-  title: { rendered: string };
-  excerpt: { rendered: string };
-  date: string;
-  _embedded?: {
-    ["wp:featuredmedia"]?: Array<{
-      source_url: string;
-    }>;
-  };
-};
 
 function useScrollAnimation() {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
       { threshold: 0.1 }
     );
-    observer.observe(el);
-    return () => observer.unobserve(el);
+    if (ref.current) observer.observe(ref.current);
+    return () => { if (ref.current) observer.unobserve(ref.current); };
   }, []);
-
   return { ref, isVisible };
 }
 
 export default function HomePage() {
-  const [latestPosts, setLatestPosts] = useState<WPPost[]>([]);
-
-  useEffect(() => {
-    getPosts(3)
-      .then((data) => setLatestPosts(data))
-      .catch((err) => console.error(err));
-  }, []);
-
   const heroAnim = useScrollAnimation();
   const aboutAnim = useScrollAnimation();
   const statsAnim = useScrollAnimation();
   const booksAnim = useScrollAnimation();
   const testimonialsAnim = useScrollAnimation();
   const quoteAnim = useScrollAnimation();
-  const writerHubAnim = useScrollAnimation();
   const newsletterAnim = useScrollAnimation();
 
   return (
-    <div
-      className="min-h-screen"
-      style={{ fontFamily: "'Montserrat', sans-serif", backgroundColor: "#f0f8ff" }}
-    >
+    <div className="min-h-screen" style={{ fontFamily: "'Montserrat', sans-serif", backgroundColor: "#f0f8ff" }}>
       <Navigation />
 
       {/* ── HERO ─────────────────────────────────────────────────── */}
@@ -289,7 +259,15 @@ export default function HomePage() {
                     can be found in the most unexpected places.
                   </p>
                 </AnimatedDropdown>
+                {/* Purchase CTAs */}
                 <div className="flex flex-wrap gap-3 pt-1">
+                  <a
+                    href="[BOOK_DIRECT_URL]"
+                    className="px-5 py-3 font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-white text-sm"
+                    style={{ backgroundColor: "#2D1B69" }}
+                  >
+                    Buy Direct
+                  </a>
                   <a
                     href="https://www.amazon.com/My-Neighbors-are-Vampires-Think/dp/B0GJKZNLZ3/ref=sr_1_1?crid=139MPO9S9TUEV&dib=eyJ2IjoiMSJ9.RQjvFUOhW_fZyWSrTXJSqjz_9ASXX91RGaiNA807rnTG8XTMcXaCugf-1DOSpUzjLfGL0pPwZKTCT-N573CR6HRSNefw6n93tzH-cyeF7S4.Goy72i-l4BScr2fmhH8iAAR7tm-CpcruAguTUMOQMFc&dib_tag=se&keywords=My+Neighbors+Are+Vampires%2C+I+Think%21&qid=1773948470&s=books&sprefix=my+neighbors+are+vampires%2C+i+think+%2Cstripbooks%2C271&sr=1-1"
                     className="px-5 py-3 font-semibold rounded-lg border transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-sm"
@@ -367,13 +345,28 @@ export default function HomePage() {
                     while celebrating the quiet strength that lives within us all.
                   </p>
                 </AnimatedDropdown>
+                {/* Purchase CTAs */}
                 <div className="flex flex-wrap gap-3 pt-1">
+                  <a
+                    href="[BOOK_DIRECT_URL]"
+                    className="px-5 py-3 font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-white text-sm"
+                    style={{ backgroundColor: "#BF6119" }}
+                  >
+                    Buy Direct
+                  </a>
                   <a
                     href="https://www.amazon.com/Keanu-Tails-exploring-unexpected-Inspired/dp/B0DX1YFNYD"
                     className="px-5 py-3 font-semibold rounded-lg border transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-sm"
                     style={{ borderColor: "#BF6119", color: "#BF6119", backgroundColor: "transparent" }}
                   >
                     Amazon
+                  </a>
+                  <a
+                    href="[BARNES_NOBLE_URL]"
+                    className="px-5 py-3 font-semibold rounded-lg border transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-sm"
+                    style={{ borderColor: "#BF6119", color: "#BF6119", backgroundColor: "transparent" }}
+                  >
+                    Barnes &amp; Noble
                   </a>
                   <Link
                     to="/books/keanu-tails"
@@ -477,95 +470,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── WRITER'S HUB / BLOG POSTS ────────────────────────────── */}
-      <section id="writers-hub" className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div
-            ref={writerHubAnim.ref}
-            className={`flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mb-12 transition-all duration-1000 ${writerHubAnim.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-          >
-            <div className="max-w-2xl">
-              <div
-                className="inline-block px-4 py-1 text-xs font-bold tracking-widest uppercase rounded-full mb-4"
-                style={{ backgroundColor: "#d0eeff", color: "#386FA4" }}
-              >
-                Writer&apos;s Hub
-              </div>
-              <h2
-                className="text-4xl lg:text-5xl font-bold mb-4"
-                style={{ fontFamily: "'Fugaz One', cursive", color: "#133C55" }}
-              >
-                Resources to Enhance Your Writing Journey
-              </h2>
-              <p className="text-base" style={{ color: "#386FA4" }}>
-                Get helpful tips and insights from Jen Stryker — updated regularly and always 100% free.
-              </p>
-            </div>
-            <Link
-              to="/writers-hub"
-              className="px-8 py-4 font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-white flex-shrink-0"
-              style={{ backgroundColor: "#133C55" }}
-            >
-              All Resources
-            </Link>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {latestPosts.map((post, i) => {
-              const image = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || "";
-
-              return (
-                <article
-                  key={post.id}
-                  className={`rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 group border ${writerHubAnim.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-                  style={{ borderColor: "#d0eeff", transitionDelay: `${i * 100}ms` }}
-                >
-                  {image && (
-                    <div className="w-full h-52 overflow-hidden">
-                      <img
-                        src={image}
-                        alt={post.title.rendered}
-                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-                  )}
-                  <div className="p-6 bg-white">
-                    <div className="flex items-center justify-between mb-3">
-                      <span
-                        className="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full"
-                        style={{ backgroundColor: "#d0eeff", color: "#386FA4" }}
-                      >
-                        Blog Post
-                      </span>
-                      <span className="text-xs" style={{ color: "#84D2F6" }}>
-                        {new Date(post.date).toLocaleDateString()}
-                      </span>
-                    </div>
-                    <h3
-                      className="text-lg font-bold mb-3 leading-snug group-hover:text-[#386FA4] transition-colors"
-                      style={{ fontFamily: "'Fugaz One', cursive", color: "#133C55" }}
-                      dangerouslySetInnerHTML={{ __html: post.title.rendered }}
-                    />
-                    <div
-                      className="text-sm leading-relaxed mb-5"
-                      style={{ color: "#386FA4" }}
-                      dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
-                    />
-                    <Link
-                      to={`/blog/${post.slug}`}
-                      className="inline-flex items-center gap-1 text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer"
-                      style={{ color: "#133C55" }}
-                    >
-                      Read Article <i className="ri-arrow-right-line" />
-                    </Link>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* ── NEWSLETTER ───────────────────────────────────────────── */}
       <section
         className="py-20"
@@ -595,11 +499,7 @@ export default function HomePage() {
                 const form = e.currentTarget;
                 const data = new URLSearchParams(new FormData(form) as unknown as Record<string, string>);
                 try {
-                  await fetch("https://readdy.ai/api/form/d6legiaqoe30lj0v7uhg", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: data.toString(),
-                  });
+                  await fetch("https://readdy.ai/api/form/d6legiaqoe30lj0v7uhg", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: data.toString() });
                   form.reset();
                 } catch { /* silent */ }
               }}

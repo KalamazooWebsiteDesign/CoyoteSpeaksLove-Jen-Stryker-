@@ -5,8 +5,6 @@ import CurrentReleases from "../pages/current-releases/page";
 import MyNeighborsAreVampires from "../pages/books/my-neighbors-are-vampires/page";
 import KeanuTails from "../pages/books/keanu-tails/page";
 import Merchandise from "../pages/merchandise/page";
-import ProductPage from "../pages/product/page";
-import CartPage from "../pages/cart/page";
 import WritersHubPage from "../pages/writers-hub/page";
 import BlogPostPage from "../pages/blog-post/page";
 import KidsCornerPage from "../pages/kids-corner/page";
@@ -31,14 +29,6 @@ const routes: RouteObject[] = [
   {
     path: "/merchandise",
     element: <Merchandise />,
-  },
-  {
-    path: "/product/:slug",
-    element: <ProductPage />,
-  },
-  {
-    path: "/cart",
-    element: <CartPage />,
   },
   {
     path: "/kids-corner",

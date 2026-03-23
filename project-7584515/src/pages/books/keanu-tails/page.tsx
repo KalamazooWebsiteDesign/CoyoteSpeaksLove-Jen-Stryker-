@@ -98,7 +98,7 @@ export default function KeanuTailsPage() {
                 the creative energy of his band, Dogstar. Love, resilience, and the unexpected.
               </p>
 
-              {/* Purchase Options */}
+              {/* ── PURCHASE OPTIONS ─────────────────────────────── */}
               <div
                 className="rounded-xl p-5 border"
                 style={{ backgroundColor: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.15)" }}
@@ -108,11 +108,25 @@ export default function KeanuTailsPage() {
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <a
+                    href="[BOOK_DIRECT_URL]"
+                    className="px-6 py-3 font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-white text-sm"
+                    style={{ backgroundColor: KT.accent }}
+                  >
+                    Buy Direct
+                  </a>
+                  <a
                     href="https://www.amazon.com/Keanu-Tails-exploring-unexpected-Inspired/dp/B0DX1YFNYD"
                     className="px-5 py-3 font-semibold rounded-lg border transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-sm"
                     style={{ borderColor: "rgba(255,255,255,0.3)", color: "#FFFFFF", backgroundColor: "transparent" }}
                   >
                     Buy on Amazon
+                  </a>
+                  <a
+                    href="[BARNES_NOBLE_URL]"
+                    className="px-5 py-3 font-semibold rounded-lg border transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-sm"
+                    style={{ borderColor: "rgba(255,255,255,0.3)", color: "#FFFFFF", backgroundColor: "transparent" }}
+                  >
+                    Barnes &amp; Noble
                   </a>
                 </div>
               </div>
@@ -308,11 +322,25 @@ export default function KeanuTailsPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
-              href="https://www.amazon.com/Keanu-Tails-exploring-unexpected-Inspired/dp/B0DX1YFNYD"
+              href="[BOOK_DIRECT_URL]"
               className="px-10 py-4 font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-white"
               style={{ backgroundColor: KT.accent }}
             >
+              Buy Direct
+            </a>
+            <a
+              href="https://www.amazon.com/Keanu-Tails-exploring-unexpected-Inspired/dp/B0DX1YFNYD"
+              className="px-8 py-4 font-semibold rounded-lg border transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer"
+              style={{ borderColor: KT.accent, color: KT.accentDark }}
+            >
               Buy on Amazon
+            </a>
+            <a
+              href="[BARNES_NOBLE_URL]"
+              className="px-8 py-4 font-semibold rounded-lg border transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer"
+              style={{ borderColor: KT.accent, color: KT.accentDark }}
+            >
+              Barnes &amp; Noble
             </a>
             <Link
               to="/current-releases"

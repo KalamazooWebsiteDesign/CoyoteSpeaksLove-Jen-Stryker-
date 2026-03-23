@@ -14,6 +14,7 @@ const books = [
       "When a curious child starts noticing strange things next door — fluttering bats, mysterious shadows, and neighbors who only come out at night — one big question comes to mind… could they be vampires?",
     image: "https://coyotespeakslove.com/staging/9788/wp-content/uploads/2026/03/Placeholder-Image-2-1011x1024.jpg",
     slug: "my-neighbors-are-vampires",
+    directUrl: "[BOOK_DIRECT_URL]",
     amazonUrl: "https://www.amazon.com/My-Neighbors-are-Vampires-Think/dp/B0GJKZNLZ3/ref=sr_1_1?crid=139MPO9S9TUEV&dib=eyJ2IjoiMSJ9.RQjvFUOhW_fZyWSrTXJSqjz_9ASXX91RGaiNA807rnTG8XTMcXaCugf-1DOSpUzjLfGL0pPwZKTCT-N573CR6HRSNefw6n93tzH-cyeF7S4.Goy72i-l4BScr2fmhH8iAAR7tm-CpcruAguTUMOQMFc&dib_tag=se&keywords=My+Neighbors+Are+Vampires%2C+I+Think%21&qid=1773948470&s=books&sprefix=my+neighbors+are+vampires%2C+i+think+%2Cstripbooks%2C271&sr=1-1",
     barnesUrl: "https://www.barnesandnoble.com/w/my-neighbors-are-vampires-i-think-kenneth-togonon/1149374154?ean=979827967694",
   },
@@ -27,8 +28,9 @@ const books = [
       "A captivating collection of short stories inspired by the spirit of Keanu Reeves and the creative energy of his band, Dogstar. Each story explores love, resilience, and the unexpected turns that shape our lives.",
     image: "https://coyotespeakslove.com/staging/9788/wp-content/uploads/2026/03/Placeholder-Image-1-1.jpg",
     slug: "keanu-tails",
+    directUrl: "[BOOK_DIRECT_URL]",
     amazonUrl: "https://www.amazon.com/Keanu-Tails-exploring-unexpected-Inspired/dp/B0DX1YFNYD",
-    barnesUrl: "",
+    barnesUrl: "[BARNES_NOBLE_URL]",
   },
 ];
 
@@ -113,21 +115,26 @@ export default function CurrentReleasesPage() {
                   </p>
                   <div className="flex flex-wrap gap-3 pt-2">
                     <a
+                      href={book.directUrl}
+                      className="px-5 py-2.5 font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-white text-sm"
+                      style={{ backgroundColor: book.accentBg }}
+                    >
+                      Buy Direct
+                    </a>
+                    <a
                       href={book.amazonUrl}
                       className="px-5 py-2.5 font-semibold rounded-lg border transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-sm"
                       style={{ borderColor: book.accentBg, color: book.accentBg }}
                     >
                       Amazon
                     </a>
-                    {book.barnesUrl && (
-                      <a
-                        href={book.barnesUrl}
-                        className="px-5 py-2.5 font-semibold rounded-lg border transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-sm"
-                        style={{ borderColor: book.accentBg, color: book.accentBg }}
-                      >
-                        Barnes &amp; Noble
-                      </a>
-                    )}
+                    <a
+                      href={book.barnesUrl}
+                      className="px-5 py-2.5 font-semibold rounded-lg border transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-sm"
+                      style={{ borderColor: book.accentBg, color: book.accentBg }}
+                    >
+                      Barnes &amp; Noble
+                    </a>
                     <Link
                       to={`/books/${book.slug}`}
                       className="px-5 py-2.5 font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-sm"

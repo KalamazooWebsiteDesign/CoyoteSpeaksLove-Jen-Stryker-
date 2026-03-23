@@ -4,7 +4,7 @@ import Navigation from "../../../components/feature/Navigation";
 import Footer from "../../../components/feature/Footer";
 import AnimatedDropdown from "../../../components/base/AnimatedDropdown";
 
-// My Neighbors Are Vampires palette — dark / purple / crimson
+// My Neighbors Are Vampires palette — dark blue / purple / red-black
 const VP = {
   deep: "#0F0818",
   purple: "#2D1B69",
@@ -36,25 +36,6 @@ const reviews = [
   },
 ];
 
-const bookImages = [
-  {
-    src: "https://storage.readdy-site.link/project_files/e9f281a4-c274-41fa-8094-5cd347c34556/a8b7446d-ec5a-4d57-a058-900c4320394e_7b908f97ff014cfa82d2c1ba9a96768c.jpg",
-    alt: "My Neighbors Are Vampires illustration spread 1",
-  },
-  {
-    src: "https://storage.readdy-site.link/project_files/e9f281a4-c274-41fa-8094-5cd347c34556/d64db359-51d0-4b17-a04d-ae0bd5baf954_5bb4b01e3c1d4d84b2f0b233476cdfc2.jpg",
-    alt: "My Neighbors Are Vampires illustration spread 2",
-  },
-  {
-    src: "https://storage.readdy-site.link/project_files/e9f281a4-c274-41fa-8094-5cd347c34556/c48c74dc-0567-49bf-997d-8612f230bf37_deede58ee9d443f09c020b63cd34c880.jpg",
-    alt: "My Neighbors Are Vampires illustration spread 3",
-  },
-  {
-    src: "https://storage.readdy-site.link/project_files/e9f281a4-c274-41fa-8094-5cd347c34556/410e6234-c34c-4e27-9e39-e7455d249473_7b14fdab0b5847c588d862fa2ca9d96f.jpg",
-    alt: "My Neighbors Are Vampires illustration spread 4",
-  },
-];
-
 export default function MyNeighborsAreVampiresPage() {
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -76,6 +57,25 @@ export default function MyNeighborsAreVampiresPage() {
     return () => { observer.disconnect(); illustObserver.disconnect(); };
   }, []);
 
+  const bookImages = [
+    {
+      src: "https://storage.readdy-site.link/project_files/e9f281a4-c274-41fa-8094-5cd347c34556/a8b7446d-ec5a-4d57-a058-900c4320394e_7b908f97ff014cfa82d2c1ba9a96768c.jpg",
+      alt: "My Neighbors Are Vampires illustration spread 1",
+    },
+    {
+      src: "https://storage.readdy-site.link/project_files/e9f281a4-c274-41fa-8094-5cd347c34556/d64db359-51d0-4b17-a04d-ae0bd5baf954_5bb4b01e3c1d4d84b2f0b233476cdfc2.jpg",
+      alt: "My Neighbors Are Vampires illustration spread 2",
+    },
+    {
+      src: "https://storage.readdy-site.link/project_files/e9f281a4-c274-41fa-8094-5cd347c34556/c48c74dc-0567-49bf-997d-8612f230bf37_deede58ee9d443f09c020b63cd34c880.jpg",
+      alt: "My Neighbors Are Vampires illustration spread 3",
+    },
+    {
+      src: "https://storage.readdy-site.link/project_files/e9f281a4-c274-41fa-8094-5cd347c34556/410e6234-c34c-4e27-9e39-e7455d249473_7b14fdab0b5847c588d862fa2ca9d96f.jpg",
+      alt: "My Neighbors Are Vampires illustration spread 4",
+    },
+  ];
+
   return (
     <div className="min-h-screen" style={{ fontFamily: "'Montserrat', sans-serif", backgroundColor: "#f0f8ff" }}>
       <style>{`
@@ -93,15 +93,26 @@ export default function MyNeighborsAreVampiresPage() {
         .vp-book-back{position:absolute;width:100%;height:100%;border-radius:8px 0 0 8px;transform:translateZ(-26px);}
         .vp-book-pages{position:absolute;width:20px;height:calc(100% - 6px);top:3px;right:-20px;background:linear-gradient(to right,#e0e0e0,#f9f9f9,#fff,#f9f9f9,#e0e0e0);border-radius:0 3px 3px 0;transform:translateZ(0) rotateY(90deg) translateX(10px);transform-origin:left center;}
         @media(max-width:1024px){.vp-book-container{max-width:300px;height:360px;}.vp-book-3d{width:280px;height:320px;}}
-        .illus-card{opacity:0;transition:opacity .7s ease-out,transform .7s cubic-bezier(.22,.68,0,1.2),box-shadow .35s ease;}
+        .preview-img-wrap{overflow:hidden;border-radius:12px;cursor:zoom-in;}
+        .preview-img-wrap img{transition:transform .5s cubic-bezier(.25,.46,.45,.94);}
+        .preview-img-wrap:hover img{transform:scale(1.06);}
+        .lightbox-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeIn .2s ease;}
+        @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+        /* Illustration card entrance animations */
+        .illus-card{opacity:0;transition:opacity .7s ease-out, transform .7s cubic-bezier(.22,.68,0,1.2), box-shadow .35s ease;}
         .illus-card.illus-in{opacity:1;transform:none !important;}
         .illus-card-tl{transform:translate(-60px,-40px) scale(.9);}
         .illus-card-tr{transform:translate(60px,-40px) scale(.9);}
         .illus-card-bl{transform:translate(-60px,40px) scale(.9);}
         .illus-card-br{transform:translate(60px,40px) scale(.9);}
-        .illus-card:hover{box-shadow:0 0 40px 6px rgba(139,26,42,0.35),0 0 80px 16px rgba(45,27,105,0.2);}
+
+        /* Glow shimmer on hover */
+        .illus-card:hover{box-shadow:0 0 40px 6px rgba(139,26,42,0.35), 0 0 80px 16px rgba(45,27,105,0.2);}
         .illus-card .illus-overlay{opacity:0;transition:opacity .4s ease;}
         .illus-card:hover .illus-overlay{opacity:1;}
+
+        /* Shimmer sweep */
         .illus-card::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(212,184,224,0.12) 50%,transparent 60%);transform:translateX(-100%);transition:transform .6s ease;border-radius:12px;}
         .illus-card:hover::after{transform:translateX(100%);}
       `}</style>
@@ -110,10 +121,11 @@ export default function MyNeighborsAreVampiresPage() {
 
       {/* Hero */}
       <section className="relative pt-36 pb-20 overflow-hidden" style={{ backgroundColor: VP.deep }}>
+        {/* Watermarked illustration background */}
         <div
           className="absolute inset-0 bg-cover bg-center opacity-[0.07]"
           style={{
-            backgroundImage: `url('${bookImages[0].src}')`,
+            backgroundImage: `url('https://storage.readdy-site.link/project_files/e9f281a4-c274-41fa-8094-5cd347c34556/a8b7446d-ec5a-4d57-a058-900c4320394e_7b908f97ff014cfa82d2c1ba9a96768c.jpg')`,
             backgroundSize: "cover",
             mixBlendMode: "screen",
           }}
@@ -146,7 +158,7 @@ export default function MyNeighborsAreVampiresPage() {
                 comes to mind&hellip; could they be vampires?
               </p>
 
-              {/* Purchase Options */}
+              {/* ── PURCHASE OPTIONS ─────────────────────────────── */}
               <div
                 className="rounded-xl p-5 border"
                 style={{ backgroundColor: "rgba(255,255,255,0.06)", borderColor: "rgba(212,184,224,0.2)" }}
@@ -155,6 +167,13 @@ export default function MyNeighborsAreVampiresPage() {
                   Purchase Options
                 </p>
                 <div className="flex flex-wrap gap-3">
+                  <a
+                    href="[BOOK_DIRECT_URL]"
+                    className="px-6 py-3 font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-white text-sm"
+                    style={{ backgroundColor: VP.crimson }}
+                  >
+                    Buy Direct
+                  </a>
                   <a
                     href="https://www.amazon.com/My-Neighbors-are-Vampires-Think/dp/B0GJKZNLZ3/ref=sr_1_1?crid=139MPO9S9TUEV&dib=eyJ2IjoiMSJ9.RQjvFUOhW_fZyWSrTXJSqjz_9ASXX91RGaiNA807rnTG8XTMcXaCugf-1DOSpUzjLfGL0pPwZKTCT-N573CR6HRSNefw6n93tzH-cyeF7S4.Goy72i-l4BScr2fmhH8iAAR7tm-CpcruAguTUMOQMFc&dib_tag=se&keywords=My+Neighbors+Are+Vampires%2C+I+Think%21&qid=1773948470&s=books&sprefix=my+neighbors+are+vampires%2C+i+think+%2Cstripbooks%2C271&sr=1-1"
                     className="px-5 py-3 font-semibold rounded-lg border transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-sm"
@@ -275,12 +294,13 @@ export default function MyNeighborsAreVampiresPage() {
         </div>
       </section>
 
-      {/* Peek Inside the Book */}
+      {/* ── PEEK INSIDE THE BOOK ──────────────────────────────────── */}
       <section className="py-24 relative overflow-hidden" style={{ backgroundColor: VP.deep }}>
+        {/* Watermarked illustration bg */}
         <div
           className="absolute inset-0 opacity-[0.05] bg-cover bg-center"
           style={{
-            backgroundImage: `url('${bookImages[2].src}')`,
+            backgroundImage: `url('https://storage.readdy-site.link/project_files/e9f281a4-c274-41fa-8094-5cd347c34556/c48c74dc-0567-49bf-997d-8612f230bf37_deede58ee9d443f09c020b63cd34c880.jpg')`,
             mixBlendMode: "screen",
           }}
         />
@@ -306,6 +326,8 @@ export default function MyNeighborsAreVampiresPage() {
               Vibrant, full-color spreads that bring every page to life — hover to explore the artwork.
             </p>
           </div>
+
+          {/* 2×2 grid */}
           <div className="grid grid-cols-2 gap-5 lg:gap-7">
             {bookImages.map((img, i) => {
               const dirClass = ["illus-card-tl", "illus-card-tr", "illus-card-bl", "illus-card-br"][i];
@@ -325,6 +347,7 @@ export default function MyNeighborsAreVampiresPage() {
                     src={img.src}
                     alt={img.alt}
                     className="w-full h-full object-cover object-top block transition-transform duration-500 hover:scale-105"
+                    style={{ display: "block" }}
                   />
                   <div
                     className="illus-overlay absolute inset-0"
@@ -334,6 +357,7 @@ export default function MyNeighborsAreVampiresPage() {
               );
             })}
           </div>
+
           <p className="text-center text-xs mt-8" style={{ color: "#6B6865" }}>
             All artwork &copy; Kenneth Togonon. All rights reserved.
           </p>
@@ -386,9 +410,16 @@ export default function MyNeighborsAreVampiresPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
-              href="https://www.amazon.com/My-Neighbors-are-Vampires-Think/dp/B0GJKZNLZ3/ref=sr_1_1?crid=139MPO9S9TUEV&dib=eyJ2IjoiMSJ9.RQjvFUOhW_fZyWSrTXJSqjz_9ASXX91RGaiNA807rnTG8XTMcXaCugf-1DOSpUzjLfGL0pPwZKTCT-N573CR6HRSNefw6n93tzH-cyeF7S4.Goy72i-l4BScr2fmhH8iAAR7tm-CpcruAguTUMOQMFc&dib_tag=se&keywords=My+Neighbors+Are+Vampires%2C+I+Think%21&qid=1773948470&s=books&sprefix=my+neighbors+are+vampires%2C+i+think+%2Cstripbooks%2C271&sr=1-1"
+              href="[BOOK_DIRECT_URL]"
               className="px-10 py-4 font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer text-white"
               style={{ backgroundColor: VP.crimson }}
+            >
+              Buy Direct
+            </a>
+            <a
+              href="https://www.amazon.com/My-Neighbors-are-Vampires-Think/dp/B0GJKZNLZ3/ref=sr_1_1?crid=139MPO9S9TUEV&dib=eyJ2IjoiMSJ9.RQjvFUOhW_fZyWSrTXJSqjz_9ASXX91RGaiNA807rnTG8XTMcXaCugf-1DOSpUzjLfGL0pPwZKTCT-N573CR6HRSNefw6n93tzH-cyeF7S4.Goy72i-l4BScr2fmhH8iAAR7tm-CpcruAguTUMOQMFc&dib_tag=se&keywords=My+Neighbors+Are+Vampires%2C+I+Think%21&qid=1773948470&s=books&sprefix=my+neighbors+are+vampires%2C+i+think+%2Cstripbooks%2C271&sr=1-1"
+              className="px-8 py-4 font-semibold rounded-lg border transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap cursor-pointer"
+              style={{ borderColor: VP.purple, color: VP.purple }}
             >
               Buy on Amazon
             </a>

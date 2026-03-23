@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useCart } from "../../lib/CartContext";
 
 export default function Navigation() {
-  const { itemCount } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -132,20 +130,13 @@ export default function Navigation() {
                 <i className={`${item.icon} text-lg`} />
               </a>
             ))}
+            {/* Cart icon */}
             <Link
-              to="/cart"
-              className="w-9 h-9 flex items-center justify-center text-white hover:text-[#91E5F6] transition-colors relative"
-              aria-label="Cart"
+              to="/merchandise"
+              className="w-9 h-9 flex items-center justify-center text-white hover:text-[#91E5F6] transition-colors cursor-pointer relative"
+              aria-label="Shop"
             >
-              <i className="ri-shopping-cart-line text-lg" />
-              {itemCount > 0 && (
-                <span
-                  className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center text-xs font-bold rounded-full"
-                  style={{ backgroundColor: "#91E5F6", color: "#133C55" }}
-                >
-                  {itemCount}
-                </span>
-              )}
+              <i className="ri-shopping-bag-line text-lg" />
             </Link>
           </div>
 
@@ -174,9 +165,6 @@ export default function Navigation() {
             <Link to="/merchandise" className={`block text-sm font-semibold tracking-wide transition-colors ${isActive("/merchandise") ? "text-[#91E5F6]" : "text-white hover:text-[#91E5F6]"}`}>Merchandise</Link>
             <Link to="/kids-corner" className={`block text-sm font-semibold tracking-wide transition-colors ${isActive("/kids-corner") ? "text-[#91E5F6]" : "text-white hover:text-[#91E5F6]"}`}>Kids Corner</Link>
             <Link to="/writers-hub" className={`block text-sm font-semibold tracking-wide transition-colors ${isBlogActive ? "text-[#91E5F6]" : "text-white hover:text-[#91E5F6]"}`}>Writer&apos;s Hub</Link>
-            <Link to="/cart" className={`block text-sm font-semibold tracking-wide transition-colors ${isActive("/cart") ? "text-[#91E5F6]" : "text-white hover:text-[#91E5F6]"}`}>
-              Cart {itemCount > 0 && `(${itemCount})`}
-            </Link>
           </div>
         </div>
       )}

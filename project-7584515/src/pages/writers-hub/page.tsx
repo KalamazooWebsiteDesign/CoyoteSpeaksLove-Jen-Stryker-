@@ -137,7 +137,7 @@ export default function WritersHubPage() {
                 </div>
               )}
 
-              {/* Filter chips + grid */}
+              {/* Filter chips */}
               {gridPosts.length > 0 && (
                 <>
                   <div className="flex flex-wrap gap-2 mb-10">
