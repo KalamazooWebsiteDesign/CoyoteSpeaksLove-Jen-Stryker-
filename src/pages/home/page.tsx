@@ -92,7 +92,7 @@ export default function HomePage() {
                 >
                   JEN
                   <br />
-                  <span style={{ color: "#91E5F6" }}>STRYKER</span>
+                  STRYKER
                 </h1>
               </div>
               <p className="text-base lg:text-lg leading-relaxed max-w-md" style={{ color: "#d0eeff" }}>
